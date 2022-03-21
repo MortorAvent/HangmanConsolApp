@@ -1,7 +1,10 @@
 from itertools import count
 import os
+import random
 import sys
 from unicodedata import numeric
+import requests
+import json
 
 number_of_tries = 0
 print("""
@@ -30,16 +33,36 @@ while True:
         print("Podaj numer podany przy poziomie trudności.")
 
 
+print("1. Wpisz swoje słowo")
+print("2. Losuj przykładowe słowo")
+
 while True:
-    print()
-    word = input("Podaj słowo do odgadnięcia: ")
-    if len(word) > 15 or len(word) < 3:
-        print("Słowo nie może mieć więcej niż 15 liter i nie mniej niż 3.")
-    elif word.islower() == False:
-        print("Słowo musi być tylko z małych liter")
-    elif word.isalpha() == False:
-        print("Słowo nie może zawierać znaków specjalnych i liczb.")
+    user_select = input("Wybierz opcję: ")
+    if user_select.count("1"):
+        while True:
+            print()
+            word = input("Podaj słowo do odgadnięcia: ")
+            if len(word) > 15 or len(word) < 3:
+                print("Słowo nie może mieć więcej niż 15 liter i nie mniej niż 3.")
+            elif word.islower() == False:
+                print("Słowo musi być tylko z małych liter")
+            elif word.isalpha() == False:
+                print("Słowo nie może zawierać znaków specjalnych i liczb.")
+            else:
+                break
+        break   
+
+    elif user_select.count("2"):
+        response = requests.get('https://zaimki.pl/api/nouns')
+        word = random.choice(response , len(response))
+        while response:
+            for i in response:
+                response.remove(i)
+            break
+        break 
+            
     else:
+        print("Wybierz jedną z możliwych opcji")
         break
 
 user_word = []
